@@ -9,8 +9,25 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+//Health check endpoints:-
+app.get("/health", (req, res) => {
+  const dbStatus =
+    mongoose.connection.readyState === 1 ? "Connected" : "Disconnected";
+
+  res.status(200).json({
+    server: "Running",
+    database: dbStatus,
+  });
+});
+
 app.use('/api/users', require("./Routes/userRoutes"));
 app.use('/api/books', require("./Routes/bookRoutes"));
+
+
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});
+
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
