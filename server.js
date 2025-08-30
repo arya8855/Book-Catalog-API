@@ -11,12 +11,9 @@ app.use(express.urlencoded({extended: true}));
 
 //Health check endpoints:-
 app.get("/health", (req, res) => {
-  const dbStatus =
-    mongoose.connection.readyState === 1 ? "Connected" : "Disconnected";
-
-  res.status(200).json({
-    server: "Running",
-    database: dbStatus,
+  res.json({
+    message: 'Server is running!',
+    database: mongoose.connection.readyState === 1 ? 'MongoDB connected' : 'Not connected',
   });
 });
 
